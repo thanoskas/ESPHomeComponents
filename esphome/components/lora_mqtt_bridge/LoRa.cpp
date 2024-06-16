@@ -455,7 +455,7 @@ void LoRaClass::setTxPower(int level, int outputPin)
   if (PA_OUTPUT_RFO_PIN == outputPin) {
     // RFO
     if (level < 0) {
-      level = 0;
+      level = 14;
     } else if (level > 14) {
       level = 14;
     }
