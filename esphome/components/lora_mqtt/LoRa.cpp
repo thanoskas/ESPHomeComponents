@@ -146,7 +146,7 @@ int LoRaClass::begin(long frequency)
   writeRegister(REG_MODEM_CONFIG_3, 0x04);
 
   // set output power to 17 dBm
-  setTxPower(17);
+  setTxPower(20);
 
   // put in standby mode
   idle();
@@ -450,42 +450,8 @@ void LoRaClass::sleep()
   writeRegister(REG_OP_MODE, MODE_LONG_RANGE_MODE | MODE_SLEEP);
 }
 
-void LoRaClass::setTxPower(int level, int outputPin)
-{
-  if (PA_OUTPUT_RFO_PIN == outputPin) {
-    // RFO
-    if (level < 0) {
-      level = 14;
-    } else if (level > 14) {
-      level = 14;
-    }
+void LoRaClass::setTxPower(20)
 
-    writeRegister(REG_PA_CONFIG, 0x70 | level);
-  } else {
-    // PA BOOST
-    if (level > 17) {
-      if (level > 20) {
-        level = 20;
-      }
-
-      // subtract 3 from level, so 18 - 20 maps to 15 - 17
-      level -= 3;
-
-      // High Power +20 dBm Operation (Semtech SX1276/77/78/79 5.4.3.)
-      writeRegister(REG_PA_DAC, 0x87);
-      setOCP(140);
-    } else {
-      if (level < 2) {
-        level = 2;
-      }
-      //Default value PA_HF/LF or +17dBm
-      writeRegister(REG_PA_DAC, 0x84);
-      setOCP(100);
-    }
-
-    writeRegister(REG_PA_CONFIG, PA_BOOST | (level - 2));
-  }
-}
 
 void LoRaClass::setFrequency(long frequency)
 {
